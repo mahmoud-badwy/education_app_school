@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/repositories/user_repository.dart';
 import '../../domain/entities/user.dart';
+import '../../domain/entities/video.dart';
 import '../models/user_model.dart';
 
 class UserRepositoryImpl implements UserRepository {
@@ -18,7 +19,21 @@ class UserRepositoryImpl implements UserRepository {
         throw Exception('User not found');
       }
     } catch (e) {
-      throw ServerFailure(e.toString());
+      throw Exception(e.toString());
+    }
+  }
+
+  @override
+  Future<List<Video>> getVideosBySubject(String subjectId) async {
+    try {
+      final querySnapshot = await firestore
+          .collection('videos')
+          .where('subjectId', isEqualTo: subjectId)
+          .get();
+
+      return querySnapshot.docs.map((doc) => VideoModel.fromFirestore(doc.data())).toList();
+    } catch (e) {
+      throw Exception('Failed to load videos: $e');
     }
   }
 }
