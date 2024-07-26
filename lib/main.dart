@@ -12,13 +12,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  // Initialize Firebase Firestore
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  // Initialize the User Repository
+  final firestore = FirebaseFirestore.instance;
   final userRepository = UserRepositoryImpl(firestore: firestore);
-
-  // Initialize the GetUser use case
   final getUserUseCase = GetUser(userRepository);
 
   runApp(MyApp(getUserUseCase: getUserUseCase));
@@ -38,7 +33,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Flutter Clean Architecture',
+        title: 'Education App',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),

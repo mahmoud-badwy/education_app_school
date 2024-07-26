@@ -1,14 +1,27 @@
 import '../../domain/entities/user.dart';
 
 class UserModel extends User {
-  UserModel({required String id, required String name, required String email})
-      : super(id: id, name: name, email: email);
+  UserModel({
+    required String id,
+    required String name,
+    required String email,
+    required String role,
+    required DateTime createdAt,
+  }) : super(
+    id: id,
+    name: name,
+    email: email,
+    role: role,
+    createdAt: createdAt,
+  );
 
   factory UserModel.fromFirestore(Map<String, dynamic> data) {
     return UserModel(
       id: data['id'],
       name: data['name'],
       email: data['email'],
+      role: data['role'],
+      createdAt: (data['createdAt'] as Timestamp).toDate(),
     );
   }
 
@@ -17,6 +30,8 @@ class UserModel extends User {
       'id': id,
       'name': name,
       'email': email,
+      'role': role,
+      'createdAt': createdAt,
     };
   }
 }

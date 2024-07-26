@@ -1,33 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import 'student/home_student_screen.dart';
+import 'teacher/home_teacher_screen.dart';
+import 'admin/home_admin_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home Screen'),
-      ),
-      body: Center(
-        child: authProvider.user == null
-            ? Text('No user data')
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Name: ${authProvider.user!.name}'),
-                  Text('Email: ${authProvider.user!.email}'),
-                ],
-              ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => authProvider.fetchUser('userId'),
-        child: const Icon(Icons.refresh),
-      ),
-    );
+    if (authProvider.user == null) {
+      return CircularProgressIndicator();
+    }
+
+    switch (authProvider.user!.role) {
+      case 'student':
+        return HomeStudentScreen();
+      case 'teacher':
+        return HomeTeacherScreen();
+      case 'admin':
+        return HomeAdminScreen();
+      default:
+        return Text('Unknown role');
+    }
   }
 }
